@@ -28,7 +28,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 class MainActivity : ComponentActivity() {
 
 
-    // FIXME DC use dagger
+    // FIXME DC use hilt
     private val client = OkHttpClient.Builder().build()
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())

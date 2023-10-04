@@ -5,9 +5,7 @@ import com.labwhisper.beerchallenge.beer.BrewMethod
 import com.labwhisper.beerchallenge.beer.Hop
 import com.labwhisper.beerchallenge.beer.Malt
 import com.labwhisper.beerchallenge.beer.Mashing
-import com.labwhisper.beerchallenge.service.BeerService
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 class BeerListProvider(
     private val beerListRepository: BeerListRepository,
@@ -22,6 +20,7 @@ class BeerListProvider(
             id = 1,
             name = "Hazy Apa",
             imageUrl = "https://picsum.photos/id/1/200/300",
+            abv = 1.1,
             description = "Just a beer",
             hops = listOf(Hop("Hop 1")),
             malts = listOf(Malt("Malt 1")),
@@ -40,6 +39,7 @@ class BeerListProvider(
             id = 2,
             name = "IPA",
             imageUrl = "https://picsum.photos/id/2/200/300",
+            abv = 2.2,
             description = "Just another beer",
             hops = listOf(Hop("Hop 1"), Hop("Hop 2")),
             malts = listOf(Malt("Malt 2")),

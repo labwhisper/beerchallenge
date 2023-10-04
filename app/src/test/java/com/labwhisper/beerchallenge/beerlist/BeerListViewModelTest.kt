@@ -27,14 +27,18 @@ class BeerListViewModelTest {
         every { id } returns 1
         every { name } returns "name1"
         every { imageUrl } returns "url1"
+        every { abv } returns 1.1
     }
     private val beer2: Beer = mockk {
         every { id } returns 2
         every { name } returns "name2"
         every { imageUrl } returns "url2"
+        every { abv } returns 2.2
     }
-    private val expectedBeer1 = BeerListItemUIModel(id = 1, name = "name1", imageUrl = "url1")
-    private val expectedBeer2 = BeerListItemUIModel(id = 2, name = "name2", imageUrl = "url2")
+    private val expectedBeer1 =
+        BeerListItemUIModel(id = 1, name = "name1", imageUrl = "url1", abvString = "1.1%")
+    private val expectedBeer2 =
+        BeerListItemUIModel(id = 2, name = "name2", imageUrl = "url2", abvString = "2.2%")
 
     private val beerListProvider: BeerListProvider = mockk()
     private val beerListItemUiModelMapper: BeerListItemUiModelMapper = mockk {

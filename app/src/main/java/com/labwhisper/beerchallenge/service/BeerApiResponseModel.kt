@@ -8,6 +8,7 @@ data class BeerApiResponseModel(
     val id: Int,
     val name: String,
     @Json(name = "image_url") val imageUrl: String,
+    val abv: Double,
     val description: String,
     val ingredients: IngredientsApiResponseModel,
     val method: BrewMethodApiResponseModel

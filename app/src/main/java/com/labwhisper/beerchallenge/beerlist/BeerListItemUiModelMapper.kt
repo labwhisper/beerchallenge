@@ -8,5 +8,6 @@ class BeerListItemUiModelMapper {
         id = beer.id,
         name = beer.name,
         imageUrl = beer.imageUrl,
+        abvString = "Alc. ${beer.abv}% Vol.",
     )
 }

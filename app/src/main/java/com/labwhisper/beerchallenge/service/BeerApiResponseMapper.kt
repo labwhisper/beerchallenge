@@ -13,6 +13,7 @@ class BeerApiResponseMapper() {
         id = beerApiResponseModel.id,
         name = beerApiResponseModel.name,
         imageUrl = beerApiResponseModel.imageUrl,
+        abv = beerApiResponseModel.abv,
         description = beerApiResponseModel.description,
         hops = beerApiResponseModel.ingredients.hops.map { Hop(it.name) },
         malts = beerApiResponseModel.ingredients.malt.map { Malt(it.name) },

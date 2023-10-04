@@ -18,6 +18,7 @@ class BeerListItemUiModelMapperTest {
             id = 1,
             name = "name",
             imageUrl = "url",
+            abv = 1.1,
             description = "description",
             hops = listOf(Hop("hop1")),
             malts = listOf(Malt("malt1")),
@@ -36,6 +37,7 @@ class BeerListItemUiModelMapperTest {
             id = 1,
             name = "name",
             imageUrl = "url",
+            abvString = "Alc. 1.1% Vol.",
         )
         val result = sut.map(beer)
         assertEquals(expected, result)

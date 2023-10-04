@@ -37,6 +37,7 @@ class BeerApiResponseMapperTest {
             ),
             twist = "twist"
         ),
+        abv = 4.4,
         ingredients = IngredientsApiResponseModel(
             hops = listOf(
                 HopApiResponseModel(
@@ -64,6 +65,7 @@ class BeerApiResponseMapperTest {
         id = 1,
         name = "name",
         imageUrl = "imageUrl",
+        abv = 4.4,
         description = "description",
         brewMethod = BrewMethod(
             mashing = listOf(
