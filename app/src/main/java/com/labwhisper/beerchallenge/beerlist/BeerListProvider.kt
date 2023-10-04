@@ -17,7 +17,7 @@ class BeerListProvider {
         Beer(
             id = 1,
             name = "Hazy Apa",
-            imageUrl = "https://picsum.photos/seed/picsum/200/300",
+            imageUrl = "https://picsum.photos/id/1/200/300",
             description = "Just a beer",
             hops = listOf(Hop("Hop 1")),
             malts = listOf(Malt("Malt 1")),
@@ -30,7 +30,7 @@ class BeerListProvider {
         Beer(
             id = 2,
             name = "IPA",
-            imageUrl = "https://picsum.photos/seed/picsum/200/300",
+            imageUrl = "https://picsum.photos/id/2/200/300",
             description = "Just another beer",
             hops = listOf(Hop("Hop 1"), Hop("Hop 2")),
             malts = listOf(Malt("Malt 2")),

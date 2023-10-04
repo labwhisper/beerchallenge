@@ -68,7 +68,7 @@ fun BeerItemRow(beer: BeerListItemUIModel) {
             model = beer.imageUrl,
             contentDescription = "Beer image",
             modifier = Modifier
-                .size(50.dp)
+                .size(100.dp)
                 .background(PurpleGrey40)
         )
         Spacer(modifier = Modifier.width(16.dp))
