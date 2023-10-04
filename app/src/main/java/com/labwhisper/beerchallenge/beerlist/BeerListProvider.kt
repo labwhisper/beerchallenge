@@ -4,14 +4,18 @@ import com.labwhisper.beerchallenge.beer.Beer
 import com.labwhisper.beerchallenge.beer.BrewMethod
 import com.labwhisper.beerchallenge.beer.Hop
 import com.labwhisper.beerchallenge.beer.Malt
+import com.labwhisper.beerchallenge.beer.Mashing
+import com.labwhisper.beerchallenge.service.BeerService
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flow
 
-class BeerListProvider {
+class BeerListProvider(
+    private val beerListRepository: BeerListRepository,
+) {
 
-    fun getAllBeers(): Flow<List<Beer>> {
-        return flowOf(mockBeerList())
-    }
+    fun getAllBeers(): Flow<List<Beer>> = getRealBeerList()
+
+    private fun getRealBeerList(): Flow<List<Beer>> = beerListRepository.getAllBeers()
 
     private fun mockBeerList(): List<Beer> = listOf(
         Beer(
@@ -22,7 +26,12 @@ class BeerListProvider {
             hops = listOf(Hop("Hop 1")),
             malts = listOf(Malt("Malt 1")),
             brewMethod = BrewMethod(
-                mashTemperatureCelsius = 23,
+                mashing = listOf(
+                    Mashing(
+                        temperatureCelsius = 23,
+                        durationMinutes = 60,
+                    )
+                ),
                 fermentationTemperatureCelsius = 40,
                 twist = "twist plot"
             ),
@@ -35,7 +44,12 @@ class BeerListProvider {
             hops = listOf(Hop("Hop 1"), Hop("Hop 2")),
             malts = listOf(Malt("Malt 2")),
             brewMethod = BrewMethod(
-                mashTemperatureCelsius = 10,
+                mashing = listOf(
+                    Mashing(
+                        temperatureCelsius = 23,
+                        durationMinutes = 75,
+                    )
+                ),
                 fermentationTemperatureCelsius = 20,
                 twist = "no twist"
             )

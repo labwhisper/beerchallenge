@@ -4,6 +4,7 @@ import com.labwhisper.beerchallenge.beer.Beer
 import com.labwhisper.beerchallenge.beer.BrewMethod
 import com.labwhisper.beerchallenge.beer.Hop
 import com.labwhisper.beerchallenge.beer.Malt
+import com.labwhisper.beerchallenge.beer.Mashing
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
@@ -21,7 +22,12 @@ class BeerListItemUiModelMapperTest {
             hops = listOf(Hop("hop1")),
             malts = listOf(Malt("malt1")),
             brewMethod = BrewMethod(
-                mashTemperatureCelsius = 1,
+                mashing = listOf(
+                    Mashing(
+                        temperatureCelsius = 1,
+                        durationMinutes = 1,
+                    )
+                ),
                 fermentationTemperatureCelsius = 2,
                 twist = "twist"
             ),
