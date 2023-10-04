@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.labwhisper.beerchallenge"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.labwhisper.beerchallenge"
@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    implementation(libs.glide.compose)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
