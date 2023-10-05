@@ -6,12 +6,17 @@ import com.labwhisper.beerchallenge.beer.Hop
 import com.labwhisper.beerchallenge.beer.Malt
 import com.labwhisper.beerchallenge.beer.Mashing
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class BeerListProvider(
     private val beerListRepository: BeerListRepository,
 ) {
 
     fun getAllBeers(): Flow<List<Beer>> = getRealBeerList()
+
+    fun getBeerById(id: Int): Flow<Beer> = getRealBeerList().map { beers ->
+        beers.first { it.id == id }
+    }
 
     private fun getRealBeerList(): Flow<List<Beer>> = beerListRepository.getAllBeers()
 

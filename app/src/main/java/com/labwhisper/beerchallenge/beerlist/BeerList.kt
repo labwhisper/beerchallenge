@@ -2,6 +2,7 @@
 
 package com.labwhisper.beerchallenge.beerlist
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -19,15 +20,22 @@ import com.labwhisper.beerchallenge.ui.theme.BeerChallengeTheme
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun BeerList(beerItemsStateFlow: StateFlow<List<BeerListItemUIModel>>) {
+fun BeerList(
+    beerItemsStateFlow: StateFlow<List<BeerListItemUIModel>>,
+    onItemClick: (beerId: Int) -> Unit,
+) {
     val beerItems: List<BeerListItemUIModel> by beerItemsStateFlow.collectAsState(initial = emptyList())
     BeerListContent(
-        beerItems = beerItems
+        beerItems = beerItems,
+        onItemClick = onItemClick,
     )
 }
 
 @Composable
-fun BeerListContent(beerItems: List<BeerListItemUIModel>) {
+fun BeerListContent(
+    beerItems: List<BeerListItemUIModel>,
+    onItemClick: (beerId: Int) -> Unit,
+) {
     Column {
         Text(text = "Number of beers: ${beerItems.count()}")
         Spacer(modifier = Modifier.height(16.dp))
@@ -36,7 +44,10 @@ fun BeerListContent(beerItems: List<BeerListItemUIModel>) {
                 items = beerItems,
                 key = { it.id }
             ) { beer ->
-                BeerItemRow(beer)
+                BeerItemRow(
+                    modifier = Modifier.clickable { onItemClick(beer.id) },
+                    beer,
+                )
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
@@ -61,7 +72,8 @@ fun BeerListContentPreview() {
                     imageUrl = "someUrl2",
                     abvString = "2.2%",
                 )
-            )
+            ),
+            onItemClick = { },
         )
     }
 }

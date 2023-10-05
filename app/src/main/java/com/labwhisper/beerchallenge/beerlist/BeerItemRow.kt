@@ -22,9 +22,12 @@ import com.labwhisper.beerchallenge.ui.theme.PurpleGrey80
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun BeerItemRow(beer: BeerListItemUIModel) {
+fun BeerItemRow(
+    modifier: Modifier = Modifier,
+    beer: BeerListItemUIModel
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(PurpleGrey80)
             .padding(16.dp),

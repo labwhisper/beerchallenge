@@ -28,4 +28,20 @@ class BeerListProviderTest {
             awaitComplete()
         }
     }
+
+    @Test
+    fun `Should get beer by id`() = runTest {
+        val beer1: Beer = mockk {
+            every { id } returns 1
+        }
+        val beer2: Beer = mockk {
+            every { id } returns 2
+        }
+        val beerList: List<Beer> = listOf(beer1, beer2)
+        coEvery { beerListRepository.getAllBeers() } returns flowOf(beerList)
+        sut.getBeerById(2).test {
+            assertEquals(beer2, awaitItem())
+            awaitComplete()
+        }
+    }
 }

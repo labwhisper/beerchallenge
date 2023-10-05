@@ -3,16 +3,16 @@ package com.labwhisper.beerchallenge
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.labwhisper.beerchallenge.beerlist.BeerList
+import com.labwhisper.beerchallenge.beerdetails.BeerDetailsUiModelMapper
+import com.labwhisper.beerchallenge.beerdetails.BeerDetailsViewModelFactory
 import com.labwhisper.beerchallenge.beerlist.BeerListItemUiModelMapper
 import com.labwhisper.beerchallenge.beerlist.BeerListProvider
-import com.labwhisper.beerchallenge.beerlist.BeerListViewModel
 import com.labwhisper.beerchallenge.beerlist.BeerListViewModelFactory
+import com.labwhisper.beerchallenge.navigation.ScreenSwitcher
 import com.labwhisper.beerchallenge.service.BeerServiceFactory
 import com.labwhisper.beerchallenge.service.ServerOnlyBeerListRepository
 import com.labwhisper.beerchallenge.ui.theme.BeerChallengeTheme
@@ -21,7 +21,7 @@ import kotlinx.coroutines.Dispatchers
 class MainActivity : ComponentActivity() {
 
 
-    // FIXME DC use hilt
+    // FIXME DC use hilt, a factory should be a singleton
     private val beerServiceFactory by lazy { BeerServiceFactory() }
     private val beerListRepository by lazy {
         ServerOnlyBeerListRepository(
@@ -37,7 +37,13 @@ class MainActivity : ComponentActivity() {
             beerListItemUiModelMapper = beerListItemUiModelMapper
         )
     }
-    private val viewModel: BeerListViewModel by viewModels { beerListViewModelFactory }
+    private val beerDetailsUiModelMapper by lazy { BeerDetailsUiModelMapper() }
+    private val beerDetailsViewModelFactory by lazy {
+        BeerDetailsViewModelFactory(
+            beerListProvider = beerListProvider,
+            beerDetailsUiModelMapper = beerDetailsUiModelMapper
+        )
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +55,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    BeerList(beerItemsStateFlow = viewModel.beerUiModelListStateFlow)
+                    ScreenSwitcher(
+                        beerListViewModelFactory = beerListViewModelFactory,
+                        beerDetailsViewModelFactory = beerDetailsViewModelFactory,
+                    )
                 }
             }
         }
