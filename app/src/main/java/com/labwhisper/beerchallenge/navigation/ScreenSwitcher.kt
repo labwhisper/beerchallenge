@@ -29,7 +29,7 @@ fun ScreenSwitcher(
 
     when (currentScreen) {
         Screen.List -> BeerList(
-            beerItemsStateFlow = beerListViewModel.beerUiModelListStateFlow,
+            beerItemsStateFlow = beerListViewModel.beerUiModelPageStateFlow,
             onItemClick = { itemId ->
                 beerDetailsViewModel.setBeerId(itemId)
                 selectedItemId = itemId

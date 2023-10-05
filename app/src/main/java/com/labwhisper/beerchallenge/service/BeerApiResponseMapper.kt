@@ -22,12 +22,12 @@ class BeerApiResponseMapper() {
 
     private fun mapToBrewMethod(beerApiResponseModel: BrewMethodApiResponseModel) = BrewMethod(
         mashing = beerApiResponseModel.mashTemp.map(::mapToMashing),
-        fermentationTemperatureCelsius = beerApiResponseModel.fermentation.temp.value.toInt(),
+        fermentationTemperatureCelsius = beerApiResponseModel.fermentation.temp.value?.toInt() ?: 0,
         twist = beerApiResponseModel.twist ?: ""
     )
 
     private fun mapToMashing(it: MashTempApiResponseModel) = Mashing(
-        temperatureCelsius = it.temp.value.toInt(),
+        temperatureCelsius = it.temp.value?.toInt() ?: 0,
         durationMinutes = it.duration ?: 0,
     )
 

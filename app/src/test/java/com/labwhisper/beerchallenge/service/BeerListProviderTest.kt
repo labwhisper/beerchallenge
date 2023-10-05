@@ -1,5 +1,6 @@
 package com.labwhisper.beerchallenge.service
 
+import androidx.paging.PagingData
 import app.cash.turbine.test
 import com.labwhisper.beerchallenge.beer.Beer
 import com.labwhisper.beerchallenge.beerlist.BeerListProvider
@@ -21,7 +22,7 @@ class BeerListProviderTest {
 
     @Test
     fun `Should get all beers`() = runTest {
-        val beerList: List<Beer> = listOf(mockk(), mockk())
+        val beerList: PagingData<Beer> = PagingData.from(listOf(mockk(), mockk()))
         every { beerListRepository.getAllBeers() } returns flowOf(beerList)
         sut.getAllBeers().test {
             assertEquals(beerList, awaitItem())
@@ -37,8 +38,9 @@ class BeerListProviderTest {
         val beer2: Beer = mockk {
             every { id } returns 2
         }
-        val beerList: List<Beer> = listOf(beer1, beer2)
+        val beerList: PagingData<Beer> = PagingData.from(listOf(beer1, beer2))
         coEvery { beerListRepository.getAllBeers() } returns flowOf(beerList)
+        coEvery { beerListRepository.getBeerById(2) } returns flowOf(beer2)
         sut.getBeerById(2).test {
             assertEquals(beer2, awaitItem())
             awaitComplete()

@@ -17,13 +17,15 @@ converter-moshi = "2.9.0"
 moshi-kotlin = "1.14.0"
 moshi-kotlin-codegen = "1.14.0"
 ksp = "1.8.10-1.0.9"
-
+paging-runtime = "3.2.1"
+paging-compose = "3.2.1"
 
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 mockk = "1.12.4"
 turbine = "0.8.0"
 coroutines-test = "1.6.1"
+paging-testing = "3.2.1"
 
 
 [libraries]
@@ -47,6 +49,8 @@ retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", v
 converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "converter-moshi" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi-kotlin" }
 moshi-kotlin-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi-kotlin-codegen" }
+paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging-runtime" }
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
@@ -54,6 +58,7 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines-test" }
+paging-testing = { group = "androidx.paging", name = "paging-testing", version.ref = "paging-testing" }
 
 
 

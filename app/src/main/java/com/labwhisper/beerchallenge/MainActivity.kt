@@ -13,6 +13,7 @@ import com.labwhisper.beerchallenge.beerlist.BeerListItemUiModelMapper
 import com.labwhisper.beerchallenge.beerlist.BeerListProvider
 import com.labwhisper.beerchallenge.beerlist.BeerListViewModelFactory
 import com.labwhisper.beerchallenge.navigation.ScreenSwitcher
+import com.labwhisper.beerchallenge.service.BeerPagingSource
 import com.labwhisper.beerchallenge.service.BeerServiceFactory
 import com.labwhisper.beerchallenge.service.ServerOnlyBeerListRepository
 import com.labwhisper.beerchallenge.ui.theme.BeerChallengeTheme
@@ -23,10 +24,14 @@ class MainActivity : ComponentActivity() {
 
     // FIXME DC use hilt, a factory should be a singleton
     private val beerServiceFactory by lazy { BeerServiceFactory() }
+
+    private val beerService = beerServiceFactory.beerService
+    private val beerPagingSource = BeerPagingSource(beerService)
     private val beerListRepository by lazy {
         ServerOnlyBeerListRepository(
             dispatcher = Dispatchers.IO,
-            beerService = beerServiceFactory.beerService,
+            beerService = beerService,
+            beerPagingSource = beerPagingSource,
         )
     }
     private val beerListProvider by lazy { BeerListProvider(beerListRepository) }

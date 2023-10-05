@@ -54,6 +54,6 @@ data class MaltApiResponseModel(
 
 @JsonClass(generateAdapter = true)
 data class AmountApiResponseModel(
-    val value: Double,
+    val value: Double?,
     val unit: String,
 )

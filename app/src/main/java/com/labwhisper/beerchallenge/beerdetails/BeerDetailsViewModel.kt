@@ -26,9 +26,11 @@ class BeerDetailsViewModel(
 
     private val _beerDetailsUiModelFlow: Flow<BeerDetailsUiModel> =
         currentBeerId.flatMapLatest { beerId ->
-            beerId?.let { beerListProvider.getBeerById(it) }
-                ?.map(beerDetailsUiModelMapper::mapToDetailsUiModel)
-                ?: flowOf(BeerDetailsUiModel.Empty)
+            beerId?.let(beerListProvider::getBeerById)
+                ?.map { beer ->
+                    beer?.let(beerDetailsUiModelMapper::mapToDetailsUiModel)
+                        ?: BeerDetailsUiModel.Empty
+                } ?: flowOf(BeerDetailsUiModel.Empty)
         }.flowOn(Dispatchers.Default)
 
     val beerDetailsUiModelStateFlow: StateFlow<BeerDetailsUiModel> =

@@ -2,6 +2,9 @@ package com.labwhisper.beerchallenge.beerlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -13,16 +16,16 @@ class BeerListViewModel(
     beerListItemUiModelMapper: BeerListItemUiModelMapper,
 ) : ViewModel() {
 
-    private val _beerUiModelListFlow: Flow<List<BeerListItemUIModel>> =
-        beerListProvider.getAllBeers().map { beers ->
-            beers.map(beerListItemUiModelMapper::map)
-        }
+    private val _beerUiModelPageFlow: Flow<PagingData<BeerListItemUIModel>> =
+        beerListProvider.getAllBeers()
+            .map { beersPage -> beersPage.map(beerListItemUiModelMapper::map) }
+            .cachedIn(viewModelScope)
 
-    val beerUiModelListStateFlow: StateFlow<List<BeerListItemUIModel>> =
-        _beerUiModelListFlow.stateIn(
+    val beerUiModelPageStateFlow: StateFlow<PagingData<BeerListItemUIModel>> =
+        _beerUiModelPageFlow.stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
-            initialValue = emptyList(),
+            initialValue = PagingData.empty(),
         )
 
 }

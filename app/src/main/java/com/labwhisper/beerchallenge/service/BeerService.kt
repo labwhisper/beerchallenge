@@ -10,14 +10,26 @@ class BeerService(
     private val beerApiResponseMapper: BeerApiResponseMapper,
 ) {
 
-    suspend fun getBeerList(): List<Beer> {
-        val allBeersResponse = beerEndpoint.getAllBeers()
+    suspend fun getBeerList(page: Int = 1, perPage: Int = 25): List<Beer> {
+        val allBeersResponse = beerEndpoint.getAllBeers(page = page, perPage = perPage)
         if (!allBeersResponse.isSuccessful) {
             Log.e("BeerService", "getBeerList: ${allBeersResponse.errorBody()}")
             return emptyList()
         }
 
         return retrieveBeerList(allBeersResponse)
+    }
+
+    suspend fun getBeerById(beerId: Int): Beer? {
+        val beerResponse = beerEndpoint.getBeerById(beerId)
+        if (!beerResponse.isSuccessful) {
+            Log.e("BeerService", "getBeerById: ${beerResponse.errorBody()}")
+            return null
+        }
+
+        return beerResponse.body()?.let {
+            it.firstOrNull()?.let { responseModel -> beerApiResponseMapper.map(responseModel) }
+        }
     }
 
     private fun BeerService.retrieveBeerList(allBeersResponse: Response<List<BeerApiResponseModel>>) =

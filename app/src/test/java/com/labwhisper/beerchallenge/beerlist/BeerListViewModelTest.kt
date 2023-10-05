@@ -1,5 +1,7 @@
 package com.labwhisper.beerchallenge.beerlist
 
+import androidx.paging.PagingData
+import androidx.paging.testing.asSnapshot
 import app.cash.turbine.test
 import com.labwhisper.beerchallenge.beer.Beer
 import io.mockk.every
@@ -49,11 +51,12 @@ class BeerListViewModelTest {
     @Test
     fun `Should be emitted the proper list of beer ui models, when provided by the provider`() =
         runTest(dispatcher) {
-            every { beerListProvider.getAllBeers() } returns flowOf(listOf(beer1, beer2))
+            every { beerListProvider.getAllBeers() } returns
+                    flowOf(PagingData.from(listOf(beer1, beer2)))
             val sut = BeerListViewModel(beerListProvider, beerListItemUiModelMapper)
             advanceUntilIdle()
-            sut.beerUiModelListStateFlow.test {
-                assertEquals(listOf(expectedBeer1, expectedBeer2), awaitItem())
+            sut.beerUiModelPageStateFlow.test {
+                assertEquals(listOf(expectedBeer1, expectedBeer2), flowOf(awaitItem()).asSnapshot())
             }
         }
 }
