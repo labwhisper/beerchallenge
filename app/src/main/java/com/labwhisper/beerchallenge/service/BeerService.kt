@@ -3,9 +3,10 @@ package com.labwhisper.beerchallenge.service
 import android.util.Log
 import com.labwhisper.beerchallenge.beer.Beer
 import retrofit2.Response
+import javax.inject.Inject
 
 //FIXME Interface out at retrofit needs to be hidden
-class BeerService(
+class BeerService @Inject constructor(
     private val beerEndpoint: BeerEndpoint,
     private val beerApiResponseMapper: BeerApiResponseMapper,
 ) {

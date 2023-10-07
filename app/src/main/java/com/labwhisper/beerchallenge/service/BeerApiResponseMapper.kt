@@ -5,8 +5,9 @@ import com.labwhisper.beerchallenge.beer.BrewMethod
 import com.labwhisper.beerchallenge.beer.Hop
 import com.labwhisper.beerchallenge.beer.Malt
 import com.labwhisper.beerchallenge.beer.Mashing
+import javax.inject.Inject
 
-class BeerApiResponseMapper() {
+class BeerApiResponseMapper @Inject constructor() {
 
     //FIXME DC, need to support units... for now using minutes and Celsius as it seems always the case
     fun map(beerApiResponseModel: BeerApiResponseModel) = Beer(
