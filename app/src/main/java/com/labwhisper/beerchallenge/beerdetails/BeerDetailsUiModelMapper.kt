@@ -5,8 +5,9 @@ import com.labwhisper.beerchallenge.beer.BrewMethod
 import com.labwhisper.beerchallenge.beer.Hop
 import com.labwhisper.beerchallenge.beer.Malt
 import com.labwhisper.beerchallenge.beer.Mashing
+import javax.inject.Inject
 
-class BeerDetailsUiModelMapper {
+class BeerDetailsUiModelMapper @Inject constructor() {
     fun mapToDetailsUiModel(beer: Beer) = BeerDetailsUiModel.Data(
         id = beer.id,
         name = beer.name,

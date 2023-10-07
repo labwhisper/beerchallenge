@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.plugin)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -72,6 +74,10 @@ dependencies {
     ksp(libs.moshi.kotlin.codegen)
     implementation(libs.paging.runtime)
     implementation(libs.paging.compose)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.hilt.navigation.compose)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

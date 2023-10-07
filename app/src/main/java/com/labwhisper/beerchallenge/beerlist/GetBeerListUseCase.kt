@@ -5,12 +5,14 @@ import com.labwhisper.beerchallenge.beer.BrewMethod
 import com.labwhisper.beerchallenge.beer.Hop
 import com.labwhisper.beerchallenge.beer.Malt
 import com.labwhisper.beerchallenge.beer.Mashing
+import com.labwhisper.beerchallenge.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class GetBeerListUseCase(
+class GetBeerListUseCase @Inject constructor(
     private val beerListRepository: BeerListRepository,
-    private val dispatcher: CoroutineDispatcher
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) {
 
     suspend fun getAllBeers(page: Int, perPage: Int): List<Beer> = withContext(dispatcher) {

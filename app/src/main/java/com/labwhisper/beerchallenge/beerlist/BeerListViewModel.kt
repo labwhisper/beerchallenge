@@ -5,13 +5,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class BeerListViewModel(
+@HiltViewModel
+class BeerListViewModel @Inject constructor(
     beerPagingProvider: BeerPagingProvider,
     beerListItemUiModelMapper: BeerListItemUiModelMapper,
 ) : ViewModel() {

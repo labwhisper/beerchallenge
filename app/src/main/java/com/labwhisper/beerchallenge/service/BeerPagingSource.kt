@@ -5,8 +5,9 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.labwhisper.beerchallenge.beer.Beer
 import com.labwhisper.beerchallenge.beerlist.GetBeerListUseCase
+import javax.inject.Inject
 
-class BeerPagingSource(
+class BeerPagingSource @Inject constructor(
     private val getBeerListUseCase: GetBeerListUseCase,
 
     ) : PagingSource<Int, Beer>() {
