@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
     implementation(libs.glide.compose)
+    implementation(libs.navigation.compose)
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi)

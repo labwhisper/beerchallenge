@@ -2,6 +2,7 @@
 
 package com.labwhisper.beerchallenge.beerdetails
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -26,7 +27,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun BeerDetails(beerStateFlow: StateFlow<BeerDetailsUiModel>, onBack: () -> Unit) {
-
+    BackHandler() { onBack() }
     val beerDetailsUiModel: BeerDetailsUiModel by beerStateFlow.collectAsState(initial = BeerDetailsUiModel.Empty)
     BeerDetailsContent(
         modifier = Modifier

@@ -4,6 +4,11 @@ package com.labwhisper.beerchallenge.beerdetails
 
 import app.cash.turbine.test
 import com.labwhisper.beerchallenge.beer.Beer
+import com.labwhisper.beerchallenge.navigation.NavigationDestination
+import com.labwhisper.beerchallenge.navigation.Navigator
+import com.labwhisper.beerchallenge.navigation.Screen
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
@@ -35,12 +40,14 @@ class BeerDetailsViewModelTest {
     private val beerDetailsUiModelMapper: BeerDetailsUiModelMapper = mockk {
         every { mapToDetailsUiModel(beer) } returns beerDetailsUiModel
     }
+    private val navigator: Navigator = mockk()
 
     @Test
     fun `Should stay in the Empty state when the id is null`() = runTest(dispatcher) {
         val sut = BeerDetailsViewModel(
             getBeerByIdUseCase = getBeerByIdUseCase,
             beerDetailsUiModelMapper = beerDetailsUiModelMapper,
+            navigator = navigator,
         )
         sut.setBeerId(null)
         advanceUntilIdle()
@@ -54,6 +61,7 @@ class BeerDetailsViewModelTest {
         val sut = BeerDetailsViewModel(
             getBeerByIdUseCase = getBeerByIdUseCase,
             beerDetailsUiModelMapper = beerDetailsUiModelMapper,
+            navigator = navigator,
         )
         sut.setBeerId(2)
         advanceUntilIdle()
@@ -67,12 +75,26 @@ class BeerDetailsViewModelTest {
         val sut = BeerDetailsViewModel(
             getBeerByIdUseCase = getBeerByIdUseCase,
             beerDetailsUiModelMapper = beerDetailsUiModelMapper,
+            navigator = navigator,
         )
         sut.setBeerId(1)
         advanceUntilIdle()
         sut.beerDetailsUiModelStateFlow.test {
             assertEquals(beerDetailsUiModel, awaitItem())
         }
+    }
+
+    @Test
+    fun `Should navigate to the list screen when the screen is tapped`() = runTest(dispatcher) {
+        coJustRun { navigator.navigateTo(any()) }
+        val sut = BeerDetailsViewModel(
+            getBeerByIdUseCase = getBeerByIdUseCase,
+            beerDetailsUiModelMapper = beerDetailsUiModelMapper,
+            navigator = navigator,
+        )
+        sut.onScreenTap()
+        advanceUntilIdle()
+        coVerify { navigator.navigateTo(NavigationDestination(Screen.List)) }
     }
 
 }

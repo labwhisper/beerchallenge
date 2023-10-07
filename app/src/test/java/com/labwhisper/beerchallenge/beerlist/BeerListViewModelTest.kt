@@ -4,6 +4,11 @@ import androidx.paging.PagingData
 import androidx.paging.testing.asSnapshot
 import app.cash.turbine.test
 import com.labwhisper.beerchallenge.beer.Beer
+import com.labwhisper.beerchallenge.navigation.NavigationDestination
+import com.labwhisper.beerchallenge.navigation.Navigator
+import com.labwhisper.beerchallenge.navigation.Screen
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
@@ -43,6 +48,7 @@ class BeerListViewModelTest {
         BeerListItemUIModel(id = 2, name = "name2", imageUrl = "url2", abvString = "2.2%")
 
     private val beerPagingProvider: BeerPagingProvider = mockk()
+    private val navigator: Navigator = mockk()
     private val beerListItemUiModelMapper: BeerListItemUiModelMapper = mockk {
         every { map(beer1) } returns expectedBeer1
         every { map(beer2) } returns expectedBeer2
@@ -53,10 +59,32 @@ class BeerListViewModelTest {
         runTest(dispatcher) {
             every { beerPagingProvider.getAllBeersPaged(pageSize = 25) } returns
                     flowOf(PagingData.from(listOf(beer1, beer2)))
-            val sut = BeerListViewModel(beerPagingProvider, beerListItemUiModelMapper)
+            val sut = BeerListViewModel(
+                beerPagingProvider = beerPagingProvider,
+                beerListItemUiModelMapper = beerListItemUiModelMapper,
+                navigator = navigator
+            )
             advanceUntilIdle()
             sut.beerUiModelPageStateFlow.test {
                 assertEquals(listOf(expectedBeer1, expectedBeer2), flowOf(awaitItem()).asSnapshot())
+            }
+        }
+
+    @Test
+    fun `Should navigate to detail screen, when beer is selected`() =
+        runTest(dispatcher) {
+            every { beerPagingProvider.getAllBeersPaged(pageSize = 25) } returns
+                    flowOf(PagingData.from(listOf(beer1, beer2)))
+            coJustRun { navigator.navigateTo(any()) }
+            val sut = BeerListViewModel(
+                beerPagingProvider = beerPagingProvider,
+                beerListItemUiModelMapper = beerListItemUiModelMapper,
+                navigator = navigator
+            )
+            sut.onBeerSelected(1)
+            advanceUntilIdle()
+            coVerify {
+                navigator.navigateTo(NavigationDestination(Screen.Detail, mapOf("beerId" to 1)))
             }
         }
 }

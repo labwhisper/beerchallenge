@@ -1,42 +1,58 @@
 package com.labwhisper.beerchallenge.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.labwhisper.beerchallenge.beerdetails.BeerDetails
 import com.labwhisper.beerchallenge.beerdetails.BeerDetailsViewModel
 import com.labwhisper.beerchallenge.beerlist.BeerList
 import com.labwhisper.beerchallenge.beerlist.BeerListViewModel
 
-//FIXME DC Replace with Navigator component
 @Composable
-fun ScreenSwitcher() {
+fun ScreenSwitcher(navigator: Navigator) {
 
-    var currentScreen by remember { mutableStateOf(Screen.List) }
-    var selectedItemId by remember { mutableStateOf<Int?>(null) }
+    val navController = rememberNavController()
+    val destination by navigator.destination.collectAsState()
 
+
+    LaunchedEffect(destination) {
+        val currentScreen = navController.currentDestination?.route?.let { Screen.getByRoute(it) }
+            ?: return@LaunchedEffect
+        navController.navigateToScreen(currentScreen, destination)
+    }
     val beerListViewModel: BeerListViewModel = hiltViewModel()
     val beerDetailsViewModel: BeerDetailsViewModel = hiltViewModel()
 
-    when (currentScreen) {
-        Screen.List -> BeerList(
-            beerItemsStateFlow = beerListViewModel.beerUiModelPageStateFlow,
-            onItemClick = { itemId ->
-                beerDetailsViewModel.setBeerId(itemId)
-                selectedItemId = itemId
-                currentScreen = Screen.Detail
-            },
-        )
+    NavHost(navController = navController, startDestination = Screen.List.route) {
 
-        Screen.Detail -> BeerDetails(
-            beerStateFlow = beerDetailsViewModel.beerDetailsUiModelStateFlow,
-            onBack = {
-                currentScreen = Screen.List
-                beerDetailsViewModel.setBeerId(null)
-            })
+        composable(route = Screen.List.route) {
+            BeerList(
+                beerItemsStateFlow = beerListViewModel.beerUiModelPageStateFlow,
+                onItemClick = { beerId -> beerListViewModel.onBeerSelected(beerId) },
+            )
+        }
+
+        composable(
+            route = Screen.Detail.route,
+            arguments = listOf(
+                navArgument("beerId") { type = NavType.IntType }
+            )
+        ) {
+            val beerId = it.arguments?.getInt("beerId")
+            beerDetailsViewModel.setBeerId(beerId)
+            BeerDetails(
+                beerStateFlow = beerDetailsViewModel.beerDetailsUiModelStateFlow,
+                onBack = { beerDetailsViewModel.onScreenTap() },
+            )
+        }
     }
+
 }
 

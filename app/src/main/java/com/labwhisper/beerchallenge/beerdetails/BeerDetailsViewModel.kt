@@ -2,6 +2,9 @@ package com.labwhisper.beerchallenge.beerdetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.labwhisper.beerchallenge.navigation.NavigationDestination
+import com.labwhisper.beerchallenge.navigation.Navigator
+import com.labwhisper.beerchallenge.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +23,7 @@ import javax.inject.Inject
 class BeerDetailsViewModel @Inject constructor(
     private val getBeerByIdUseCase: GetBeerByIdUseCase,
     private val beerDetailsUiModelMapper: BeerDetailsUiModelMapper,
+    private val navigator: Navigator,
 ) : ViewModel() {
 
     private val currentBeerId = MutableStateFlow<Int?>(null)
@@ -46,7 +50,12 @@ class BeerDetailsViewModel @Inject constructor(
     fun setBeerId(id: Int?) {
         viewModelScope.launch {
             currentBeerId.emit(id)
+        }
+    }
 
+    fun onScreenTap() {
+        viewModelScope.launch {
+            navigator.navigateTo(NavigationDestination(Screen.List))
         }
     }
 
