@@ -4,7 +4,6 @@ package com.labwhisper.beerchallenge.beerdetails
 
 import app.cash.turbine.test
 import com.labwhisper.beerchallenge.beer.Beer
-import com.labwhisper.beerchallenge.beerlist.BeerListProvider
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
@@ -29,23 +28,51 @@ class BeerDetailsViewModelTest {
     private val beer: Beer = mockk()
     private val beerDetailsUiModel: BeerDetailsUiModel.Data = mockk()
 
-    private val beerListProvider: BeerListProvider = mockk {
+    private val getBeerByIdUseCase: GetBeerByIdUseCase = mockk {
         every { getBeerById(1) } returns flowOf(beer)
+        every { getBeerById(2) } returns flowOf(null)
     }
     private val beerDetailsUiModelMapper: BeerDetailsUiModelMapper = mockk {
         every { mapToDetailsUiModel(beer) } returns beerDetailsUiModel
     }
 
     @Test
-    fun `Should have a proper current beer state`() = runTest(dispatcher) {
+    fun `Should stay in the Empty state when the id is null`() = runTest(dispatcher) {
         val sut = BeerDetailsViewModel(
-            beerListProvider = beerListProvider,
+            getBeerByIdUseCase = getBeerByIdUseCase,
             beerDetailsUiModelMapper = beerDetailsUiModelMapper,
         )
-        sut.setBeerId(1)
+        sut.setBeerId(null)
+        advanceUntilIdle()
         sut.beerDetailsUiModelStateFlow.test {
-            advanceUntilIdle()
             assertEquals(BeerDetailsUiModel.Empty, awaitItem())
         }
     }
+
+    @Test
+    fun `Should stay in the Empty state when the item is not found`() = runTest(dispatcher) {
+        val sut = BeerDetailsViewModel(
+            getBeerByIdUseCase = getBeerByIdUseCase,
+            beerDetailsUiModelMapper = beerDetailsUiModelMapper,
+        )
+        sut.setBeerId(2)
+        advanceUntilIdle()
+        sut.beerDetailsUiModelStateFlow.test {
+            assertEquals(BeerDetailsUiModel.Empty, awaitItem())
+        }
+    }
+
+    @Test
+    fun `Should have a proper current beer state`() = runTest(dispatcher) {
+        val sut = BeerDetailsViewModel(
+            getBeerByIdUseCase = getBeerByIdUseCase,
+            beerDetailsUiModelMapper = beerDetailsUiModelMapper,
+        )
+        sut.setBeerId(1)
+        advanceUntilIdle()
+        sut.beerDetailsUiModelStateFlow.test {
+            assertEquals(beerDetailsUiModel, awaitItem())
+        }
+    }
+
 }

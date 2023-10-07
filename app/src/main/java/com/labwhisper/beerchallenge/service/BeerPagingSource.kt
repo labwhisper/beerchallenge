@@ -4,15 +4,17 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.labwhisper.beerchallenge.beer.Beer
+import com.labwhisper.beerchallenge.beerlist.GetBeerListUseCase
 
 class BeerPagingSource(
-    private val beerService: BeerService
-) : PagingSource<Int, Beer>() {
+    private val getBeerListUseCase: GetBeerListUseCase,
+
+    ) : PagingSource<Int, Beer>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Beer> {
         return try {
             val page = params.key ?: 1
-            val beers = beerService.getBeerList(page, params.loadSize)
+            val beers = getBeerListUseCase.getAllBeers(page, params.loadSize)
             LoadResult.Page(
                 data = beers,
                 prevKey = if (page == 1) null else page - 1,

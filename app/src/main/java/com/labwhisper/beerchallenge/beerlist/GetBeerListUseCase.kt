@@ -1,19 +1,21 @@
 package com.labwhisper.beerchallenge.beerlist
 
-import androidx.paging.PagingData
 import com.labwhisper.beerchallenge.beer.Beer
 import com.labwhisper.beerchallenge.beer.BrewMethod
 import com.labwhisper.beerchallenge.beer.Hop
 import com.labwhisper.beerchallenge.beer.Malt
 import com.labwhisper.beerchallenge.beer.Mashing
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 
-class BeerListProvider(
+class GetBeerListUseCase(
     private val beerListRepository: BeerListRepository,
+    private val dispatcher: CoroutineDispatcher
 ) {
 
-    fun getAllBeers(): Flow<PagingData<Beer>> = beerListRepository.getAllBeers()
-    fun getBeerById(id: Int): Flow<Beer?> = beerListRepository.getBeerById(id)
+    suspend fun getAllBeers(page: Int, perPage: Int): List<Beer> = withContext(dispatcher) {
+        beerListRepository.getAllBeers(page = page, perPage = perPage)
+    }
 
     private fun mockBeerList(): List<Beer> = listOf(
         Beer(
@@ -53,7 +55,6 @@ class BeerListProvider(
                 fermentationTemperatureCelsius = 20,
                 twist = "no twist"
             )
-
         ),
     )
 

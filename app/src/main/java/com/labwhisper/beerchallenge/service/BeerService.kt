@@ -10,7 +10,7 @@ class BeerService(
     private val beerApiResponseMapper: BeerApiResponseMapper,
 ) {
 
-    suspend fun getBeerList(page: Int = 1, perPage: Int = 25): List<Beer> {
+    suspend fun getBeerList(page: Int, perPage: Int): List<Beer> {
         val allBeersResponse = beerEndpoint.getAllBeers(page = page, perPage = perPage)
         if (!allBeersResponse.isSuccessful) {
             Log.e("BeerService", "getBeerList: ${allBeersResponse.errorBody()}")

@@ -12,12 +12,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class BeerListViewModel(
-    beerListProvider: BeerListProvider,
+    beerPagingProvider: BeerPagingProvider,
     beerListItemUiModelMapper: BeerListItemUiModelMapper,
 ) : ViewModel() {
 
     private val _beerUiModelPageFlow: Flow<PagingData<BeerListItemUIModel>> =
-        beerListProvider.getAllBeers()
+        beerPagingProvider.getAllBeersPaged(pageSize = 25)
             .map { beersPage -> beersPage.map(beerListItemUiModelMapper::map) }
             .cachedIn(viewModelScope)
 

@@ -9,9 +9,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.labwhisper.beerchallenge.beerdetails.BeerDetailsUiModelMapper
 import com.labwhisper.beerchallenge.beerdetails.BeerDetailsViewModelFactory
+import com.labwhisper.beerchallenge.beerdetails.GetBeerByIdUseCase
 import com.labwhisper.beerchallenge.beerlist.BeerListItemUiModelMapper
-import com.labwhisper.beerchallenge.beerlist.BeerListProvider
 import com.labwhisper.beerchallenge.beerlist.BeerListViewModelFactory
+import com.labwhisper.beerchallenge.beerlist.BeerPagingProvider
+import com.labwhisper.beerchallenge.beerlist.GetBeerListUseCase
 import com.labwhisper.beerchallenge.navigation.ScreenSwitcher
 import com.labwhisper.beerchallenge.service.BeerPagingSource
 import com.labwhisper.beerchallenge.service.BeerServiceFactory
@@ -26,26 +28,34 @@ class MainActivity : ComponentActivity() {
     private val beerServiceFactory by lazy { BeerServiceFactory() }
 
     private val beerService = beerServiceFactory.beerService
-    private val beerPagingSource = BeerPagingSource(beerService)
-    private val beerListRepository by lazy {
-        ServerOnlyBeerListRepository(
-            dispatcher = Dispatchers.IO,
-            beerService = beerService,
+    private val beerListRepository by lazy { ServerOnlyBeerListRepository(beerService = beerService) }
+    private val beerListItemUiModelMapper by lazy { BeerListItemUiModelMapper() }
+    private val getBeerListUseCase by lazy {
+        GetBeerListUseCase(beerListRepository, Dispatchers.Default)
+    }
+    private val beerPagingSource = BeerPagingSource(getBeerListUseCase)
+    private val beerPagingProvider by lazy {
+        BeerPagingProvider(
             beerPagingSource = beerPagingSource,
+            dispatcher = Dispatchers.Default,
         )
     }
-    private val beerListProvider by lazy { BeerListProvider(beerListRepository) }
-    private val beerListItemUiModelMapper by lazy { BeerListItemUiModelMapper() }
     private val beerListViewModelFactory by lazy {
         BeerListViewModelFactory(
-            beerListProvider = beerListProvider,
-            beerListItemUiModelMapper = beerListItemUiModelMapper
+            beerPagingProvider = beerPagingProvider,
+            beerListItemUiModelMapper = beerListItemUiModelMapper,
         )
     }
     private val beerDetailsUiModelMapper by lazy { BeerDetailsUiModelMapper() }
+    private val getBeerByIdUseCase by lazy {
+        GetBeerByIdUseCase(
+            beerListRepository = beerListRepository,
+            dispatcher = Dispatchers.Default
+        )
+    }
     private val beerDetailsViewModelFactory by lazy {
         BeerDetailsViewModelFactory(
-            beerListProvider = beerListProvider,
+            getBeerByIdUseCase = getBeerByIdUseCase,
             beerDetailsUiModelMapper = beerDetailsUiModelMapper
         )
     }

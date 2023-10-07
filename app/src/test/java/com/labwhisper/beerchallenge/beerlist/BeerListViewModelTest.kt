@@ -42,7 +42,7 @@ class BeerListViewModelTest {
     private val expectedBeer2 =
         BeerListItemUIModel(id = 2, name = "name2", imageUrl = "url2", abvString = "2.2%")
 
-    private val beerListProvider: BeerListProvider = mockk()
+    private val beerPagingProvider: BeerPagingProvider = mockk()
     private val beerListItemUiModelMapper: BeerListItemUiModelMapper = mockk {
         every { map(beer1) } returns expectedBeer1
         every { map(beer2) } returns expectedBeer2
@@ -51,9 +51,9 @@ class BeerListViewModelTest {
     @Test
     fun `Should be emitted the proper list of beer ui models, when provided by the provider`() =
         runTest(dispatcher) {
-            every { beerListProvider.getAllBeers() } returns
+            every { beerPagingProvider.getAllBeersPaged(pageSize = 25) } returns
                     flowOf(PagingData.from(listOf(beer1, beer2)))
-            val sut = BeerListViewModel(beerListProvider, beerListItemUiModelMapper)
+            val sut = BeerListViewModel(beerPagingProvider, beerListItemUiModelMapper)
             advanceUntilIdle()
             sut.beerUiModelPageStateFlow.test {
                 assertEquals(listOf(expectedBeer1, expectedBeer2), flowOf(awaitItem()).asSnapshot())
