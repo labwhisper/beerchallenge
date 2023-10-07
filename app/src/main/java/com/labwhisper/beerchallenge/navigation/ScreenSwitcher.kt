@@ -28,7 +28,6 @@ fun ScreenSwitcher(navigator: Navigator) {
         navController.navigateToScreen(currentScreen, destination)
     }
     val beerListViewModel: BeerListViewModel = hiltViewModel()
-    val beerDetailsViewModel: BeerDetailsViewModel = hiltViewModel()
 
     NavHost(navController = navController, startDestination = Screen.List.route) {
 
@@ -46,6 +45,7 @@ fun ScreenSwitcher(navigator: Navigator) {
             )
         ) {
             val beerId = it.arguments?.getInt("beerId")
+            val beerDetailsViewModel: BeerDetailsViewModel = hiltViewModel()
             beerDetailsViewModel.setBeerId(beerId)
             BeerDetails(
                 beerStateFlow = beerDetailsViewModel.beerDetailsUiModelStateFlow,
