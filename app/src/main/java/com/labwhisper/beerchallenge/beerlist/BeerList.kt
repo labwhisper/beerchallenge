@@ -1,5 +1,6 @@
 package com.labwhisper.beerchallenge.beerlist
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,11 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.labwhisper.beerchallenge.ui.theme.BeerChallengeTheme
+import com.labwhisper.beerchallenge.ui.theme.Purple90
+import com.labwhisper.beerchallenge.ui.theme.PurpleGrey40
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
 
@@ -36,8 +40,12 @@ fun BeerListContent(
     beerItems: LazyPagingItems<BeerListItemUIModel>,
     onItemClick: (beerId: Int) -> Unit,
 ) {
-    Column {
-        Text(text = "Number of beers: ${beerItems.itemCount}")
+    Column(modifier = Modifier.background(PurpleGrey40)) {
+        Text(
+            text = "Brews list",
+            color = Purple90,
+            fontSize = 40.sp
+        )
         Spacer(modifier = Modifier.height(16.dp))
         LazyColumn {
             items(
